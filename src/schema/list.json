@@ -1,0 +1,33 @@
+{
+    "schema":{
+        "type": "object",
+        "properties": {
+          "continent": {
+            "type": "string",
+            "enum": ["Europe", "Amérique", "Asie", "Afrique", "Océanie"]
+          },
+          "pays": {
+            "type": "string"
+          }
+        }
+      },
+      "uischema":{
+        "type": "VerticalLayout",
+        "elements": [
+          {
+            "type": "Control",
+            "label": "Continent",
+            "scope": "#/properties/continent",
+            "options": {
+              "enum": ["Europe", "Amérique",  "Asie", "Afrique", "Océanie"]
+            }
+          },
+          {
+            "type": "Control",
+            "label": "Pays",
+            "scope": "#/properties/pays"
+          }
+        ]
+      }
+
+}
