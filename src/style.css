@@ -1,0 +1,37 @@
+*,*::after,*::before{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+
+}
+
+
+.container{
+    margin: 20vh auto;
+    width: 500px;
+    height: 420px;
+    background-color: beige;
+    padding: 5% 15px;
+    border-radius: 20px;
+}
+.btnSubmit{
+    padding: 0;
+    margin: 20px 27%; 
+    color:black;
+    font-size: 20px;
+    background-color: darkgray;
+    width: 200px;
+    height: 30px;
+    border: .5px solid blue;
+    border-radius: 10px;
+    cursor: pointer;
+}
+@media screen and (max-width:500px) {
+    .btnSubmit{
+        margin: 20px 21%; 
+    }
+.container{
+    
+    width: 380px;
+}
+}
