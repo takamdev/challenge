@@ -1,14 +1,11 @@
-
-import Froms from './components/Froms.jsx';
-
+import Froms from "./components/Froms.jsx";
 
 function App() {
-  return (
-    
-    <div className='App'>
-      <Froms/>
-    </div>
-  )
+   return (
+      <div className="App">
+         <Froms />
+      </div>
+   );
 }
 
-export default App
+export default App;
