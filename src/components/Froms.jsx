@@ -7,11 +7,14 @@ import {
 } from "@jsonforms/material-renderers";
 
 function Froms() {  
+    // etat de l'erreur des le champ pays selectionner
    const [error , setError]= useState(true)
+   //etat d'erreur dans le champ nom
    let dataErrors = []
-   // variable qui contient les données du formulaires
-
+  
+// objet contenent les données du formulaires
    let Data = {};
+   // configuration des schema et ui schema
    const config = {
       schema: {
          type: "object",
@@ -43,6 +46,7 @@ function Froms() {
 
    // fontion de soumission du formulaire
    const submit = () => {
+      // verification des erreurs et summision du formulaires si pas d'erreur
       if (dataErrors.length !== 0 || error===true) {
          console.log(dataErrors);
       } else if (dataErrors.length === 0 && error===false) {
