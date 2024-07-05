@@ -1,29 +1,14 @@
 import { useState } from "react";
 import { JsonForms } from "@jsonforms/react";
-
+import { TextField, Autocomplete } from "@mui/material";
 import {
    materialRenderers,
    materialCells,
 } from "@jsonforms/material-renderers";
 
-function Froms() {
-   /*
-    * L'état country est le tableau des pays en fonction du continent choisie. Par defaut il contient les pays de l'Europe
-    * L'état continent permet de stocké le continent choisir. Par defaut le continant choisir est l'Europe
-    * L'objet config (json) contient les schemas de donnéés et les schemas d'interface utilisateur.
-    * L'énumeration country permet de de rendre dynamique le tableau d'enumeration en fonction du continent choisir
-    */
-   const [country, setCountry] = useState([
-      "France",
-      "Alemagne",
-      "Belgique",
-      "Italie",
-   ]);
-
-   const [continent, setContinennt] = useState("Europe");
-
-   //variable contenant les erreurs
-   let dataErrors = "";
+function Froms() {  
+   const [error , setError]= useState(true)
+   let dataErrors = []
    // variable qui contient les données du formulaires
 
    let Data = {};
@@ -32,24 +17,10 @@ function Froms() {
          type: "object",
          properties: {
             nom: {
-               type: "string",
-               minLength: 5,
-               maxLength: 50,
-            },
-            continent: {
-               type: "string",
-               enum: ["Afrique", "Amerique", "Europe", "Asie"],
-            },
-            Country: {
-               type: "array",
-               uniqueItems: true,
-               items: {
-                  type: "string",
-                  enum: country,
-               },
-            },
+               type: "string"
+            }
          },
-         required: ["continent", "nom", "Country"],
+         required: ["nom"],
       },
       uischema: {
          type: "VerticalLayout",
@@ -57,62 +28,24 @@ function Froms() {
             {
                type: "Control",
                scope: "#/properties/nom",
-            },
-            {
-               type: "Control",
-               scope: "#/properties/continent",
-            },
-            {
-               type: "Control",
-               scope: "#/properties/Country",
-               label: "pays visité",
-            },
+            }
          ],
       },
+      enum: ["Etas-unis", "Canada","Chine", "Inde", "Japon", "Corée du sud", "Brésil","France", "Alemagne", "Belgique", "Italie", "Méxique","Cameroun", "Tchad", "Congo", "Gabon"],
+
    };
 
    // recuperation des configuartions
    const schema = config.schema;
    const uischema = config.uischema;
+   const country = config.enum
 
-   // fonction appeler l'orsque les valeur du formulaire change
-   const changeData = ({ data, errors }) => {
-      // recuperation de des donnéés
-      Data = data;
-      // recuperer les erreurs
-      dataErrors = errors;
-      // recuperation des donnees du champ continent
-      const Continent = data.continent;
-
-      /*
-       * l'orsque la valeur du continent choisir est différent de celle dans l'etat continent
-       * ont change l'état continent pas la nouvelle valeur choisir
-       * en suite le tableau d'enumeration (tableau de pays) est modifier en fonction du continent choisir , et toute cocher pas defaut
-       */
-      if (Continent && Continent !== continent) {
-         setContinennt(Continent);
-
-         if (Continent.toLowerCase() === "afrique") {
-            const Country = ["Cameroun", "Tchad", "Congo", "Gabon"];
-            setCountry(Country);
-         }
-         if (Continent.toLowerCase() === "amerique") {
-            setCountry(["Etas-unis", "Canada", "Brésil", "Méxique"]);
-         }
-         if (Continent.toLowerCase() === "europe") {
-            setCountry(["France", "Alemagne", "Belgique", "Italie"]);
-         }
-         if (Continent.toLowerCase() === "asie") {
-            setCountry(["Chine", "Inde", "Japon", "Corée du sud"]);
-         }
-      }
-   };
 
    // fontion de soumission du formulaire
-   const ondhleSmit = () => {
-      if (dataErrors.length !== 0) {
+   const submit = () => {
+      if (dataErrors.length !== 0 || error===true) {
          console.log(dataErrors);
-      } else {
+      } else if (dataErrors.length === 0 && error===false) {
          console.log(Data);
       }
    };
@@ -122,12 +55,35 @@ function Froms() {
          <JsonForms
             schema={schema}
             uischema={uischema}
-            data={{ Country: country, continent: continent }}
+            data={{}}
             renderers={materialRenderers}
             cells={materialCells}
-            onChange={changeData}
+            onChange={({data,errors})=>(Data = {...Data,nom:data.nom},dataErrors=errors)}
          />
-         <button type="button" className="btnSubmit" onClick={ondhleSmit}>
+        <Autocomplete
+            sx={{ mt:1 }}
+            multiple
+            options={country}
+            getOptionLabel={(option) => option}
+            disableCloseOnSelect
+            onChange={(e,value)=>{
+               if(value.length!==0) setError(false)
+               Data={...Data,selectContry:value}
+              
+               }}
+            renderInput={(params) => (
+            <TextField
+               {...params}
+               variant="outlined"
+               label="pays visité"
+               placeholder="choisir un pays"
+               required
+               error={error}
+               helperText={error ? "is a required property" : ""}
+            />
+            )}
+         />
+         <button type="button" className="btnSubmit" onClick={submit}>
             Envoyer
          </button>
       </div>
